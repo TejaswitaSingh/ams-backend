@@ -1,10 +1,10 @@
 const express = require("express");
-const adminRouter = express.Router();
-const adminController = require("../controllers/adminController");
+const AdminController = require("../controllers/adminController");
+const AdminRouter = express.Router();
 
 //register
-adminRouter.post("/register",(req,res)=>{
-    const adminRegistered = new adminController().regsiter(req.body);
+AdminRouter.post("/register",(req,res)=>{
+    const adminRegistered = new AdminController().register(req.body);
     adminRegistered.then(
         (success)=>{
             res.send(success)
@@ -16,3 +16,20 @@ adminRouter.post("/register",(req,res)=>{
     )
 })
 //register
+
+// login
+AdminRouter.post("/login",(req,res)=>{
+    const adminLoggedIn=new AdminController().login(req.body);
+    adminLoggedIn.then(
+        (success)=>{
+            res.send(success)
+        }
+    ).catch(
+        (error)=>{
+            res.send(error)
+        }
+    )
+})
+// login
+
+module.exports = AdminRouter;

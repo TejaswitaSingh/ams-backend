@@ -1,13 +1,14 @@
-const adminPrimaryModel = require("../models/adminPrimaryModel")
-const adminLoginModel = require("../models/adminLoginModel")
+const AdminDatabaseRecord = require("../models/AdminDatabaseRecord")
+const AdminLoginRequest = require("../models/AdminLoginRequest")
 
-class adminController{
+class AdminController{
     // register
     register(adminDetails){
+        console.log(adminDetails,"register form wala")
         return new Promise(
             async (resolve,reject)=>{
                 try{
-                    if(!adminDetails.firstName || !adminDetails.lastName || !adminDetails.phoneNumber || !adminDetails.email || !adminDetails.password){
+                    if(!adminDetails.firstName || !adminDetails.lastName || !adminDetails.email || !adminDetails.password){
                         reject(
                             {
                                 msg:"Provide all information",
@@ -16,7 +17,7 @@ class adminController{
                         )
                         return
                     }
-                    const adminCheck = await adminPrimaryModel.findOne({
+                    const adminCheck = await AdminLoginRequest.findOne({
                         $or:[
                             {email:adminDetails.email},
                             {phoneNumber:adminDetails.phoneNumber}
@@ -30,7 +31,7 @@ class adminController{
                             }
                         )
                     }else{
-                        const  admin = new adminPrimaryModel({
+                        const  admin = new AdminDatabaseRecord({
                             firstName:adminDetails.firstName,
                             lastName:adminDetails.lastName,
                             phoneNumber:adminDetails.phoneNumber,
@@ -42,7 +43,7 @@ class adminController{
                                 resolve(
                                     {
                                         msg:"Admin created",
-                                        status:1
+                                        status:1,
                                     }
                                 )
                             }
@@ -68,5 +69,61 @@ class adminController{
             }
         )
     }
+    
+    //register
+
+    // login
+    login(adminDetails){ 
+        return new Promise(
+            async (resolve,reject)=>{
+                try {
+                    if(!adminDetails.email || !adminDetails.password){
+                        reject(
+                            {
+                                msg:"Provide all information",
+                                status:0
+                            }
+                        )
+                        return
+                    }
+                    const checkAdmin = await AdminLoginRequest.findOne({email:adminDetails.email})
+                    if(checkAdmin){
+                        if(adminDetails.password==checkAdmin.password){
+                            resolve(
+                                {
+                                    msg:"Login successfull",
+                                    status:1,
+                                    checkAdmin:{...checkAdmin.toJSON()}
+                                }
+                            )
+                        }else{
+                            reject(
+                                {
+                                    msg:"Password is incorrect",
+                                    status:0
+                                }
+                            )
+                        }
+                    }else{
+                        reject(
+                            {
+                                msg:"Account does not exist",
+                                status:0
+                            }
+                        )
+                    }
+                } catch (error) {
+                    reject(
+                        {
+                            msg:"Internal server error",
+                            status:0
+                        }
+                    )
+                }
+            }
+        )
+    }
+    // login
 }
-//register
+
+module.exports = AdminController
