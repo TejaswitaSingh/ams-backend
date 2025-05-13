@@ -1,42 +1,39 @@
-const AdminDatabaseRecord = require("../models/AdminDatabaseRecord")
-const AdminLoginRequest = require("../models/AdminLoginRequest")
+const AdminDatabaseRecord = require("../models/AdminDatabaseRecord");
+const AdminRegisterRequest = require("../models/AdminRegisterRequest");
+const AdminLoginRequest = require("../models/AdminLoginRequest");
 
 class AdminController{
     // register
-    register(adminDetails){
-        console.log(adminDetails,"register form wala")
-        return new Promise(
+    register(adminRegisterRequest){
+        if (!(adminRegisterRequest instanceof AdminRegisterRequest)) {
+        throw new Error("Invalid input: Expected an instance of AdminRegisterRequest");
+    }
+    if(!adminRegisterRequest.validate()){
+        return Promise.reject({
+            msg:"All fields are required",
+            status:0
+        })
+    }
+    
+    return new Promise(
             async (resolve,reject)=>{
                 try{
-                    if(!adminDetails.firstName || !adminDetails.lastName || !adminDetails.email || !adminDetails.password){
-                        reject(
-                            {
-                                msg:"Provide all information",
-                                status:0
-                            }
-                        )
-                        return
-                    }
-                    const adminCheck = await AdminLoginRequest.findOne({
-                        $or:[
-                            {email:adminDetails.email},
-                            {phoneNumber:adminDetails.phoneNumber}
-                        ]
+                    const adminCheck = await AdminDatabaseRecord.findOne({
+                            email:adminRegisterRequest.email,  
                     })
                     if(adminCheck){
                         reject(
                             {
-                                msg:"This email or phoneNumber already exists",
+                                msg:"This email already exists",
                                 status:0
                             }
                         )
                     }else{
                         const  admin = new AdminDatabaseRecord({
-                            firstName:adminDetails.firstName,
-                            lastName:adminDetails.lastName,
-                            phoneNumber:adminDetails.phoneNumber,
-                            email:adminDetails.email,
-                            password:adminDetails.password
+                            firstName:adminRegisterRequest.firstName,
+                            lastName:adminRegisterRequest.lastName,
+                            email:adminRegisterRequest.email,
+                            password:adminRegisterRequest.password
                         })
                         admin.save().then(
                             ()=>{
@@ -73,22 +70,23 @@ class AdminController{
     //register
 
     // login
-    login(adminDetails){ 
+    login(adminLoginRequest){ 
+        if (!(adminLoginRequest instanceof AdminLoginRequest)) {
+        throw new Error("Invalid input: Expected an instance of AdminLoginRequest");
+    } 
+        if (!adminLoginRequest.validate()) {
+        return Promise.reject({
+        msg: "Email and password are required",
+        status: 0,
+            });
+        }
+
         return new Promise(
             async (resolve,reject)=>{
                 try {
-                    if(!adminDetails.email || !adminDetails.password){
-                        reject(
-                            {
-                                msg:"Provide all information",
-                                status:0
-                            }
-                        )
-                        return
-                    }
-                    const checkAdmin = await AdminLoginRequest.findOne({email:adminDetails.email})
+                    const checkAdmin = await AdminDatabaseRecord.findOne({email:adminLoginRequest.email})
                     if(checkAdmin){
-                        if(adminDetails.password==checkAdmin.password){
+                        if(adminLoginRequest.password==checkAdmin.password){
                             resolve(
                                 {
                                     msg:"Login successfull",

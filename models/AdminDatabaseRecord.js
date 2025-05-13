@@ -72,6 +72,6 @@ AdminDatabaseSchema.pre('save', function(next) {
     next();
 });
 
-const AdminDatabaseRecord = mongoose.model('AdminPrimary', AdminDatabaseSchema);
+const AdminDatabaseRecord = mongoose.model('Admins', AdminDatabaseSchema);
 
 module.exports = AdminDatabaseRecord;
