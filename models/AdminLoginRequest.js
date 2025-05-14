@@ -1,5 +1,12 @@
 class AdminLoginRequest {
-  constructor(email, password) {
+  
+  constructor(rawData) {
+    if (typeof rawData !== 'object' || rawData === null) {
+      throw new Error("Invalid input: Expected an object");
+    }
+
+    const { email, password } = rawData;
+
     this.email = email;
     this.password = password;
   }
@@ -19,3 +26,5 @@ class AdminLoginRequest {
     };
   }
 }
+
+module.exports = AdminLoginRequest;

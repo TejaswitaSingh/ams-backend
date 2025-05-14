@@ -1,10 +1,17 @@
 class AdminRegisterRequest {
-  constructor(firstName, lastName, email, password) {
+  constructor(rawData) {
+    if (typeof rawData !== 'object' || rawData === null) {
+      throw new Error("Invalid input: Expected an object");
+    }
+
+    const { firstName, lastName, email, password } = rawData;
+
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
-    this.password = password; // Note: In a real app, never store raw passwords
+    this.password = password; // In a real app, never store plain passwords
   }
+
 
   validate(){
         if(!this.firstName || !this.lastName || !this.email || !this.password){
@@ -29,4 +36,4 @@ class AdminRegisterRequest {
   }
 }
 
-
+module.exports = AdminRegisterRequest;

@@ -14,6 +14,7 @@ class AdminController{
             status:0
         })
     }
+    console.log(adminRegisterRequest)
     
     return new Promise(
             async (resolve,reject)=>{
