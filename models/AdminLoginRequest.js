@@ -27,4 +27,4 @@ class AdminLoginRequest {
   }
 }
 
-module.exports = AdminLoginRequest;
+export default AdminLoginRequest

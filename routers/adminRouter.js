@@ -1,7 +1,7 @@
-const express = require("express");
-const AdminController = require("../controllers/adminController");
-const AdminRegisterRequest = require("../models/AdminRegisterRequest");
-const AdminLoginRequest = require("../models/AdminLoginRequest");
+import express from 'express';
+import AdminController from '../controllers/adminController.js';
+import AdminRegisterRequest from '../models/AdminRegisterRequest.js';
+import AdminLoginRequest from '../models/AdminLoginRequest.js';
 const AdminRouter = express.Router();
 
 
@@ -38,4 +38,4 @@ AdminRouter.post("/login",(req,res)=>{
 })
 // login
 
-module.exports = AdminRouter;
+export default AdminRouter;

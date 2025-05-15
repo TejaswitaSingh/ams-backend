@@ -36,4 +36,4 @@ class AdminRegisterRequest {
   }
 }
 
-module.exports = AdminRegisterRequest;
+export default AdminRegisterRequest

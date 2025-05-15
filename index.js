@@ -1,10 +1,10 @@
-require('dotenv').config()
-const express = require("express");
+import dotenv from "dotenv";
+import express from "express";
 const server = express();
-const cors = require("cors");
-const mongoose= require("mongoose");
-const AdminRouter = require('./routers/adminRouter');
-
+import cors from "cors";
+import mongoose from "mongoose";
+import AdminRouter from './routers/adminRouter.js'
+dotenv.config();
 
 server.use(cors(
     {

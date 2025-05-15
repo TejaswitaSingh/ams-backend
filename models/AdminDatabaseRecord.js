@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const AdminDatabaseSchema = new mongoose.Schema(
     {
@@ -74,4 +74,4 @@ AdminDatabaseSchema.pre('save', function(next) {
 
 const AdminDatabaseRecord = mongoose.model('Admins', AdminDatabaseSchema);
 
-module.exports = AdminDatabaseRecord;
+export default AdminDatabaseRecord

@@ -1,6 +1,7 @@
-const AdminDatabaseRecord = require("../models/AdminDatabaseRecord");
-const AdminRegisterRequest = require("../models/AdminRegisterRequest");
-const AdminLoginRequest = require("../models/AdminLoginRequest");
+import AdminDatabaseRecord from "../models/AdminDatabaseRecord.js"
+import AdminLoginRequest from "../models/AdminLoginRequest.js";
+import AdminRegisterRequest from "../models/AdminRegisterRequest.js";
+import { generateToken, verifyToken } from "../utils/Token.js";
 
 class AdminController{
     // register
@@ -88,11 +89,14 @@ class AdminController{
                     const checkAdmin = await AdminDatabaseRecord.findOne({email:adminLoginRequest.email})
                     if(checkAdmin){
                         if(adminLoginRequest.password==checkAdmin.password){
+                            const token = generateToken(checkAdmin);
+                            console.log(token)
                             resolve(
                                 {
                                     msg:"Login successfull",
                                     status:1,
-                                    checkAdmin:{...checkAdmin.toJSON()}
+                                    checkAdmin:{...checkAdmin.toJSON()},
+                                    token
                                 }
                             )
                         }else{
@@ -125,4 +129,4 @@ class AdminController{
     // login
 }
 
-module.exports = AdminController
+export default AdminController
