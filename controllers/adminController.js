@@ -2,6 +2,7 @@ import AdminDatabaseRecord from "../models/AdminDatabaseRecord.js"
 import AdminLoginRequest from "../models/AdminLoginRequest.js";
 import AdminRegisterRequest from "../models/AdminRegisterRequest.js";
 import { generateToken, verifyToken } from "../utils/Token.js";
+import AdminCreateRequest from "../models/AdminCreateRequest.js";
 
 class AdminController{
     // register
@@ -68,7 +69,6 @@ class AdminController{
             }
         )
     }
-    
     //register
 
     // login
@@ -89,7 +89,7 @@ class AdminController{
                     const checkAdmin = await AdminDatabaseRecord.findOne({email:adminLoginRequest.email})
                     if(checkAdmin){
                         if(adminLoginRequest.password==checkAdmin.password){
-                            const token = generateToken(checkAdmin);
+                            const token = generateToken(checkAdmin.toJSON());
                             console.log(token)
                             resolve(
                                 {
@@ -127,6 +127,60 @@ class AdminController{
         )
     }
     // login
+
+    // create
+    createAdmin(adminCreateRequest){
+        if (!(adminCreateRequest instanceof AdminCreateRequest)) {
+        throw new Error("Invalid input: Expected an instance of AdminCreateRequest");
+    }
+
+    if (!adminCreateRequest.validate()) {
+        return Promise.reject({
+            msg: "All fields are required",
+            status: 0
+        });
+    }
+        return new Promise(
+        async (resolve,reject)=>{
+            try {
+                const adminCheck = await AdminDatabaseRecord.findOne({ email: adminCreateRequest.email });
+            if (adminCheck) {
+                return reject({
+                    msg: "This email already exists",
+                    status: 0
+                });
+            }
+
+            // Create a new admin
+            const admin = new AdminDatabaseRecord({
+                firstName: adminCreateRequest.firstName,
+                lastName: adminCreateRequest.lastName,
+                email: adminCreateRequest.email,
+                password: adminCreateRequest.password, 
+                phoneNumber: adminCreateRequest.phoneNumber,
+                role: adminCreateRequest.role // Assign the role, e.g., "admin"
+            });
+
+            // Save the admin to the database
+            await admin.save();
+            resolve({
+                msg: "Admin created successfully",
+                status: 1,
+            });
+            } catch (error) {
+                console.log(error)
+                reject(
+                    {
+                        msg:"Internal server error",
+                        status:0
+                    }
+                )
+            }
+        })
+    }
+    // create
+
 }
+
 
 export default AdminController

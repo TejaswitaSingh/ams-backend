@@ -18,7 +18,6 @@ const AdminDatabaseSchema = new mongoose.Schema(
         },
         phoneNumber: {
             type: String,
-            unique: true,
             match: /^[0-9]{10,15}$/ // Basic phone number validation
         },
         email: {
