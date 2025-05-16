@@ -54,7 +54,51 @@ AdminRouter.post("/create",(req,res)=>{
         }
     )
 })
+//create admin
 
+//read admin
+AdminRouter.get("/all",(req,res)=>{
+    const adminRead = new AdminController().getAdmins();
+    adminRead.then(
+        (success)=>{
+            res.send(success)
+        }
+    ).catch(
+        (error)=>{
+            res.send(error)
+        }
+    )
+})
+//read admin
 
+// update admin
+AdminRouter.put("/:id",(req,res)=>{
+    const adminUpdate = new AdminController().updateAdmin(req.params.id,req.body);
+    adminUpdate.then(
+        (success)=>{
+            res.send(success)
+        }
+    ).catch(
+        (error)=>{
+            res.send(error)
+        }
+    )
+})
+// update admin
+
+// delete admin
+AdminRouter.delete("/:id",(req,res)=>{
+    const adminDelete = new AdminController().deleteAdmin(req.params.id);
+    adminDelete.then(
+        (success)=>{
+            res.send(success)
+        }
+    ).catch(
+        (error)=>{
+            res.send(error)
+        }
+    )
+})
+// delete admin
 
 export default AdminRouter;

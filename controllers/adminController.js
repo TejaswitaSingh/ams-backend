@@ -180,6 +180,92 @@ class AdminController{
     }
     // create
 
+    // read
+    getAdmins(){
+        return new Promise(
+        async (resolve,reject)=>{
+            try {
+                const admins = await AdminDatabaseRecord.find({});
+            resolve({
+                    msg: "Admin list fetched successfully",
+                    status: 1,
+                    data: admins
+            });
+            } catch (error) {
+                console.log(error)
+                reject(
+                    {
+                        msg: "Internal server error",
+                        status: 0
+                    }
+                )
+            }
+        })
+    }
+    // read
+    // update
+    updateAdmin(id, adminUpdateRequest) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Check if admin exists
+            const adminCheck = await AdminDatabaseRecord.findById(id);
+            if (!adminCheck) {
+                return reject({
+                    msg: "Admin not found",
+                    status: 0
+                });
+            }
+            const updatedAdmin = await AdminDatabaseRecord.findByIdAndUpdate(id,adminUpdateRequest,{new:true});
+            if (!updatedAdmin) {
+                return reject({
+                    msg: "Unable to update admin",
+                    status: 0
+                });
+            }
+
+            resolve({
+                msg: "Admin updated successfully",
+                status: 1,
+                data: updatedAdmin
+            });
+        } catch (error) {
+            console.log(error);
+            reject({
+                msg: "Internal server error",
+                status: 0
+            });
+        }
+    });
+    }
+    // update
+    // In your AdminController class
+    deleteAdmin(id) {
+        return new Promise(async (resolve, reject) => {
+        try {
+            const adminCheck = await AdminDatabaseRecord.findByIdAndDelete(id);
+            if (!adminCheck) {
+                return reject({
+                    msg: "Admin not found",
+                    status: 0
+                });
+            }
+            resolve({
+                msg: "Admin deleted successfully",
+                status: 1
+            });
+        } catch (error) {
+            console.error("Error deleting admin:", error);
+            reject({
+                msg: "Internal server error",
+                status: 0,
+                error: error.message
+            });
+        }
+        });
+    }
+    // delete
+
+
 }
 
 
