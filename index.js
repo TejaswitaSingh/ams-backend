@@ -14,6 +14,7 @@ server.use(cors(
 
 server.use(express.json());
 server.use("/admin",AdminRouter)
+server.use("/teacher",AdminRouter)
 
 mongoose.connect(process.env.MONGODB_URL,{
     dbName:"AMS"
