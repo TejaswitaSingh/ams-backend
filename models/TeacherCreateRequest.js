@@ -23,25 +23,19 @@ class TeacherCreateRequest {
             return { status: 0, message: 'Invalid email address.' };
         }
 
-        if (!this.password || this.password.length < 6) {
-            return { status: 0, message: 'Password must be at least 6 characters.' };
+        if (!this.password) {
+            return { status: 0, message: 'Please provide password' };
         }
 
         if (!this.phoneNumber || !/^[0-9]{10}$/.test(this.phoneNumber)) {
             return { status: 0, message: 'Invalid phone number.' };
         }
 
-        if (!this.subject || this.subject.length < 2) {
-            return { status: 0, message: 'Subject must be at least 2 characters.' };
-        }
-
-        const allowedRoles = ['teacher', 'headteacher', 'assistant']; // optional, if you use role-based access
-        if (this.role && !allowedRoles.includes(this.role)) {
-            return { status: 0, message: 'Invalid role selected for teacher.' };
-        }
+        
 
         return { status: 1, message: 'Validation successful.' };
     }
 }
 
 export default TeacherCreateRequest;
+

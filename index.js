@@ -4,6 +4,8 @@ const server = express();
 import cors from "cors";
 import mongoose from "mongoose";
 import AdminRouter from './routers/adminRouter.js'
+import TeacherRouter from "./routers/TeacherRouter.js";
+
 dotenv.config();
 
 server.use(cors(
@@ -14,7 +16,7 @@ server.use(cors(
 
 server.use(express.json());
 server.use("/admin",AdminRouter)
-server.use("/teacher",AdminRouter)
+server.use("/teacher",TeacherRouter)
 
 mongoose.connect(process.env.MONGODB_URL,{
     dbName:"AMS"

@@ -35,7 +35,7 @@ const TeacherDatabaseSchema = new mongoose.Schema(
             type: String,
             enum: ['teacher'],
             default: 'teacher',
-            required: true
+            required: false
         },
         isEmailVerified: {
             type: Boolean,
@@ -44,15 +44,12 @@ const TeacherDatabaseSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
-            minlength: 8
-        },
-        classes: {
-            type: [String], // List of classes (e.g., ["Class 5", "Class 6"])
-            default: []
+            minlength: 3
         },
         status: {
             type: Boolean,
-            default: true
+            enum:["pending,true,false"],
+            default: "pending"
         },
         createdAt: {
             type: Date,

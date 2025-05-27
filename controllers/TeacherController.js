@@ -22,9 +22,9 @@ class TeacherController {
                 const teacher = new TeacherDatabaseRecord({
                     firstName: teacherCreateRequest.firstName,
                     lastName: teacherCreateRequest.lastName,
+                    password:teacherCreateRequest.password,
                     email: teacherCreateRequest.email,
                     phoneNumber: teacherCreateRequest.phoneNumber,
-                    subject: teacherCreateRequest.subject,
                     status: teacherCreateRequest.status !== undefined ? teacherCreateRequest.status : true
                 });
 
