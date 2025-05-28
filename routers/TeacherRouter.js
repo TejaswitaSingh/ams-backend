@@ -1,7 +1,7 @@
 import express from 'express';
-import TeacherCreateRequest from '../models/TeacherCreateRequest.js';
-import TeacherUpdateRequest from '../models/TeacherUpdateRequest.js';
-import TeacherDeleteRequest from '../models/TeacherDeleteRequest.js';
+import TeacherCreateRequest from '../models/Teachers/TeacherCreateRequest.js';
+import TeacherUpdateRequest from '../models/Teachers/TeacherUpdateRequest.js';
+import TeacherDeleteRequest from '../models/Teachers/TeacherDeleteRequest.js';
 import TeacherController from '../controllers/TeacherController.js';
 
 

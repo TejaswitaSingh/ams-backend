@@ -1,7 +1,7 @@
-import TeacherDatabaseRecord from "../models/TeacherDatabaseRecord.js";
-import TeacherCreateRequest from "../models/TeacherCreateRequest.js";
-import TeacherUpdateRequest from "../models/TeacherUpdateRequest.js";
-import TeacherDeleteRequest from "../models/TeacherDeleteRequest.js";
+import TeacherDatabaseRecord from "../models/Teachers/MainDatabase/TeacherDatabaseRecord.js";
+import TeacherCreateRequest from "../models/Teachers/TeacherCreateRequest.js";
+import TeacherUpdateRequest from "../models/Teachers/TeacherUpdateRequest.js";
+import TeacherDeleteRequest from "../models/Teachers/TeacherDeleteRequest.js";
 
 class TeacherController {
     // Create Teacher

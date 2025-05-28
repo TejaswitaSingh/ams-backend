@@ -1,10 +1,10 @@
-import AdminDatabaseRecord from "../models/AdminDatabaseRecord.js"
-import AdminLoginRequest from "../models/AdminLoginRequest.js";
-import AdminRegisterRequest from "../models/AdminRegisterRequest.js";
+import AdminDatabaseRecord from "../models/Admins/MainDatabase/AdminDatabaseRecord.js"
+import AdminLoginRequest from "../models/Admins/AdminLoginRequest.js";
+import AdminRegisterRequest from "../models/Admins/AdminRegisterRequest.js";
 import { generateToken, verifyToken } from "../utils/Token.js";
-import AdminCreateRequest from "../models/AdminCreateRequest.js";
-import AdminUpdateRequest from "../models/AdminUpdateRequest.js";
-import AdminDeleteRequest from "../models/AdminDeleteRequest.js";
+import AdminCreateRequest from "../models/Admins/AdminCreateRequest.js";
+import AdminUpdateRequest from "../models/Admins/AdminUpdateRequest.js";
+import AdminDeleteRequest from "../models/Admins/AdminDeleteRequest.js";
 
 class AdminController {
     // register

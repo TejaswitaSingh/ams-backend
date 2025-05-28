@@ -1,10 +1,10 @@
 import express from 'express';
-import AdminRegisterRequest from '../models/AdminRegisterRequest.js';
-import AdminLoginRequest from '../models/AdminLoginRequest.js';
+import AdminRegisterRequest from '../models/Admins/AdminRegisterRequest.js';
+import AdminLoginRequest from '../models/Admins/AdminLoginRequest.js';
 import adminAuth from '../middleware/adminAuth.js';
-import AdminCreateRequest from '../models/AdminCreateRequest.js';
-import AdminUpdateRequest from '../models/AdminUpdateRequest.js';
-import AdminDeleteRequest from '../models/AdminDeleteRequest.js';
+import AdminCreateRequest from '../models/Admins/AdminCreateRequest.js';
+import AdminUpdateRequest from '../models/Admins/AdminUpdateRequest.js';
+import AdminDeleteRequest from '../models/Admins/AdminDeleteRequest.js';
 import AdminController from '../controllers/adminController.js';
 
 const AdminRouter = express.Router();
