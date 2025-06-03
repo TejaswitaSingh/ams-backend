@@ -1,7 +1,7 @@
 import express from "express";
-import ClassCreateRequest from "../models/Classes/ClassCreateRequest.js";
-import ClassUpdateRequest from "../models/Classes/ClassUpdateRequest.js";
-import ClassDeleteRequest from "../models/Classes/ClassDeleteRequest.js";
+import ClassCreateRequest from "../models/Class/ClassCreateRequest.js";
+import ClassUpdateRequest from "../models/Class/ClassUpdateRequest.js";
+import ClassDeleteRequest from "../models/Class/ClassDeleteRequest.js";
 import ClassController from "../controllers/classController.js";
 
 const ClassRouter = express.Router();
@@ -62,7 +62,8 @@ ClassRouter.put("/:id", (req, res) => {
 
 // Delete class
 ClassRouter.delete("/:id", (req, res) => {
-  const classDeleteRequest = new ClassDeleteRequest({ id: req.params.id });
+  console.log(req.params.id, "router id")
+  const classDeleteRequest = new ClassDeleteRequest({ classId: req.params.id });
   const classDelete = new ClassController().deleteClass(classDeleteRequest);
   classDelete
     .then((success) => res.send(success))
