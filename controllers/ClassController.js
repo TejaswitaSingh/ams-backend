@@ -20,15 +20,14 @@ class ClassController {
 
     return new Promise(async (resolve, reject) => {
       try {
-        // Check if a class with the same className and section already exists
+        // Check if class with same name already exists
         const existingClass = await ClassDatabaseRecord.findOne({
-          className: classCreateRequest.className,
-          section: classCreateRequest.section,
+          className: classCreateRequest.className
         });
 
         if (existingClass) {
           return reject({
-            msg: "Class with this name and section already exists",
+            msg: "Class with this name already exists",
             status: 0,
           });
         }
@@ -47,6 +46,7 @@ class ClassController {
         reject({
           msg: "Internal server error",
           status: 0,
+          error: error.message
         });
       }
     });
@@ -62,7 +62,10 @@ class ClassController {
           query.status = filters.status === 'active';
         }
         if (filters.search) {
-          query.className = { $regex: filters.search, $options: "i" };
+          query.$or = [
+            { className: { $regex: filters.search, $options: "i" } },
+            { classCode: { $regex: filters.search, $options: "i" } }
+          ];
         }
 
         const skip = (page - 1) * limit;
@@ -99,7 +102,8 @@ class ClassController {
         console.error(error);
         reject({
           msg: "Internal server error",
-          status: 0
+          status: 0,
+          error: error.message
         });
       }
     });
@@ -125,7 +129,8 @@ class ClassController {
         console.error(error);
         reject({
           msg: "Internal server error",
-          status: 0
+          status: 0,
+          error: error.message
         });
       }
     });
@@ -157,26 +162,26 @@ class ClassController {
 
         const updateData = classUpdateRequest.toDatabaseFormat();
 
-        // Optional check to avoid duplicate className + section combo
-        if (
-          (updateData.className && updateData.className !== existingClass.className) ||
-          (updateData.section && updateData.section !== existingClass.section)
-        ) {
+        // Check for duplicate class name
+        if (updateData.className && updateData.className !== existingClass.className) {
           const duplicate = await ClassDatabaseRecord.findOne({
-            className: updateData.className || existingClass.className,
-            section: updateData.section || existingClass.section,
-            _id: { $ne: id } // exclude current class
+            className: updateData.className,
+            _id: { $ne: id }
           });
 
           if (duplicate) {
             return reject({
-              msg: "Another class with this class name and section already exists",
+              msg: "Another class with this name already exists",
               status: 0
             });
           }
         }
 
-        const updatedClass = await ClassDatabaseRecord.findByIdAndUpdate(id, updateData, { new: true });
+        const updatedClass = await ClassDatabaseRecord.findByIdAndUpdate(
+          id, 
+          updateData, 
+          { new: true }
+        );
 
         resolve({
           msg: "Class updated successfully",
@@ -187,7 +192,8 @@ class ClassController {
         console.error(error);
         reject({
           msg: "Internal server error",
-          status: 0
+          status: 0,
+          error: error.message
         });
       }
     });
@@ -223,6 +229,56 @@ class ClassController {
         });
       } catch (error) {
         console.error("Error deleting class:", error);
+        reject({
+          msg: "Internal server error",
+          status: 0,
+          error: error.message
+        });
+      }
+    });
+  }
+
+  // Additional method to update student count
+  async updateStudentCount(classId, change) {
+    return this.updateCount(classId, 'studentCount', change);
+  }
+
+  // Additional method to update teacher count
+  async updateTeacherCount(classId, change) {
+    return this.updateCount(classId, 'teacherCount', change);
+  }
+
+  // Helper method for count updates
+  async updateCount(classId, field, change) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (typeof change !== 'number' || !Number.isInteger(change)) {
+          return reject({
+            msg: "Change value must be an integer",
+            status: 0
+          });
+        }
+
+        const updatedClass = await ClassDatabaseRecord.findByIdAndUpdate(
+          classId,
+          { $inc: { [field]: change } },
+          { new: true }
+        );
+
+        if (!updatedClass) {
+          return reject({
+            msg: "Class not found",
+            status: 0
+          });
+        }
+
+        resolve({
+          msg: `${field} updated successfully`,
+          status: 1,
+          data: updatedClass
+        });
+      } catch (error) {
+        console.error(`Error updating ${field}:`, error);
         reject({
           msg: "Internal server error",
           status: 0,

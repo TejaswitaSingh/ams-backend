@@ -1,20 +1,45 @@
+import mongoose from "mongoose";
+
+
 class ClassDeleteRequest {
   constructor({ classId }) {
-    console.log(classId,"id for request")
-    this.classId = classId?.trim() || "";
+    this.classId = classId?.toString()?.trim() || ""; // Ensure string conversion
   }
 
   validate() {
-    // Validate if classId is a valid MongoDB ObjectId
-    if (!this.classId || !/^[0-9a-fA-F]{24}$/.test(this.classId)) {
-      return { status: 0, message: "Invalid or missing class ID." };
+    // Check if classId exists
+    if (!this.classId) {
+      return { 
+        status: 0, 
+        message: "Class ID is required.",
+        errorCode: "MISSING_CLASS_ID"
+      };
     }
 
-    return { status: 1, message: "Validation successful." };
+    // Validate MongoDB ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(this.classId)) {
+      return { 
+        status: 0, 
+        message: "Invalid class ID format.",
+        errorCode: "INVALID_ID_FORMAT"
+      };
+    }
+
+    return { 
+      status: 1, 
+      message: "Validation successful." 
+    };
   }
 
   getId() {
     return this.classId;
+  }
+
+  // New method to get the request in a consistent format
+  toRequestFormat() {
+    return {
+      classId: this.classId
+    };
   }
 }
 
