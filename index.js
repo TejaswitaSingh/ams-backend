@@ -7,6 +7,7 @@ import AdminRouter from './routers/adminRouter.js'
 import TeacherRouter from "./routers/TeacherRouter.js";
 import StudentRouter from "./routers/StudentRouter.js";
 import ClassRouter from "./routers/ClassRouter.js";
+import SectionRouter from "./routers/SectionRouter.js";
 
 
 dotenv.config();
@@ -22,6 +23,7 @@ server.use("/admin",AdminRouter)
 server.use("/teacher",TeacherRouter)
 server.use("/student",StudentRouter)
 server.use("/class",ClassRouter)
+server.use("/section",SectionRouter)
 
 mongoose.connect(process.env.MONGODB_URL,{
     dbName:"AMS"
